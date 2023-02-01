@@ -39,3 +39,7 @@ A fast and low memory consuming application to create and manage wallpaper using
 
 - Video loading with cache optimization
 
+## 0.0.2
+
+- Added Delta Time optimization, Pixmap Imlib context loading optimization
+
