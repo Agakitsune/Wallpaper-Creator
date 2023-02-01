@@ -71,11 +71,11 @@ const int &wcreator::Window::depth() const {
     return __depth;
 }
 
-void raise() const {
+void wcreator::Window::raise() const {
     XRaiseWindow(&Context::getDisplay(), getHandle());
 }
 
-void lower() const {
+void wcreator::Window::lower() const {
     XLowerWindow(&Context::getDisplay(), getHandle());
 }
 

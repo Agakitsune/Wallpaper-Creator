@@ -14,7 +14,6 @@
 
 #include "Context.hpp"
 #include "graphics/Drawable.hpp"
-#include "graphics/image/Image.hpp"
 
 #include "utils/Types.hpp"
 
