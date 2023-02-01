@@ -20,14 +20,14 @@ class AsyncQueue : public std::queue<T> {
             std::lock_guard<std::mutex> lock(__lock);
             if (std::queue<T>::empty())
                 return false;
-            value = std::queue<T>::front();
+            value = std::move(std::queue<T>::front());
             std::queue<T>::pop();
             return true;
         }
 
         T pop() {
             std::lock_guard<std::mutex> lock(__lock);
-            T value = std::queue<T>::front();
+            T value = std::move(std::queue<T>::front());
             std::queue<T>::pop();
             return value;
         }

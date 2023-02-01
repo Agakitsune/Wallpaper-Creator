@@ -21,6 +21,10 @@ Drawable(XCreatePixmap(&Context::getDisplay(), window.getHandle(), window.width(
     __width = window.width();
     __height = window.height();
     __image = imlib_create_image(window.width(), window.height());
+
+    imlib_context_set_display(&Context::getDisplay());
+    imlib_context_set_visual(&Context::getDefaultVisual());
+    imlib_context_set_colormap(Context::getDefaultColormap());
     // __context = XCreateGC(&Context::getDisplay(), __internal, 0, nullptr);
 }
 
@@ -63,7 +67,7 @@ void wcreator::Pixmap::drawFrame(const cv::Mat &frame) {
     imlib_context_set_image(__image);
     auto ptr = imlib_image_get_data();
     std::memcpy(ptr, frame.data, frame.cols * frame.rows * 4);
-    imlib_image_put_back_data(ptr);
+    // imlib_image_put_back_data(ptr);
     // Rendering the image
     __draw();
 }
@@ -88,9 +92,7 @@ void wcreator::Pixmap::__draw() {
     // XPutImage(&Context::getDisplay(), __internal, __context, __image.getHandle(), 0, 0, 0, 0, __image.width(), __image.height());
     // XFreeGC(&Context::getDisplay(), __context);
     // Set Display, Visual and Colormap
-    imlib_context_set_display(&Context::getDisplay());
-    imlib_context_set_visual(&Context::getDefaultVisual());
-    imlib_context_set_colormap(Context::getDefaultColormap());
+
     // Set Drawable
     imlib_context_set_drawable(__internal);
     // Render the Image

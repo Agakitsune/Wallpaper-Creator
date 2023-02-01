@@ -20,6 +20,9 @@ Video::Video(const std::string &file) : __video(file) {
     // Starts to load the cache
     __cacheLoader = std::thread(&Video::__loadFrame, this);
     while (!__isLoaded) {}
+    std::cout << "Frame count: " << __video.get(cv::CAP_PROP_FRAME_COUNT) << std::endl;
+    std::cout << "Framerate: " << __video.get(cv::CAP_PROP_FPS) << std::endl;
+    __framerate = __video.get(cv::CAP_PROP_FPS);
 }
 
 Video::~Video() {
@@ -54,11 +57,15 @@ cv::Mat Video::getFrame() {
     cv::Mat tmp;
     // Poll the frame
     while (!__frameCache.poll(tmp))
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1 / __framerate));
     // std::cout << "polling frame "  << std::endl;
     // Getting the frame in the cache and convert to rgba
     cv::cvtColor(tmp, frame, cv::COLOR_BGR2BGRA);
     return frame;
+}
+
+const unsigned int &Video::getFramerate() const {
+    return __framerate;
 }
 
 void Video::__loadFrame() {
@@ -80,6 +87,9 @@ void Video::__loadFrame() {
             __frameCache.push(frame);
         }
         __isLoaded = true;
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
+        const float dt = (1.0f / __framerate) * (__frameCache.size() * 0.25) * 1000;
+        // std::cout << "Delta:" << dt << std::endl;
+        // std::this_thread::sleep_for(std::chrono::milliseconds((int64_t)dt));
     }
 }

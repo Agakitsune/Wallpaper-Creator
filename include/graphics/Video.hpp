@@ -34,6 +34,8 @@ namespace wcreator {
         std::atomic<bool> __isRunning = true;
         std::atomic<bool> __isLoaded = false;
 
+        unsigned int __framerate;
+
         public:
             Video(const std::string &file);
             ~Video();
@@ -43,6 +45,8 @@ namespace wcreator {
             void loadVideo(const std::string &file);
 
             cv::Mat getFrame();
+
+            const unsigned int &getFramerate() const;
 
         private:
             void __loadFrame();
