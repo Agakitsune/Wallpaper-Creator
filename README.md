@@ -1,6 +1,12 @@
 # Wallpaper-Creator
 A fast and low memory consuming application to create and manage wallpaper using X11
 
+# Dependencies:
+
+- OpenCV
+- Imlib2
+- Xrandr
+
 # Compability:
 
 - Supports X11 Window (tested on i3)
