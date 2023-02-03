@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 3.17)
-include(FetchContent)
 
 project(wallpaper_creator)
 
@@ -7,14 +6,6 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED, True)
 
 file(GLOB_RECURSE SOURCES "./src/*.cpp")
-
-FetchContent(
-    opencv
-    GIT_REPOSITORY https://github.com/opencv/opencv.git
-    GIT_TAG 4.7.0
-)
-
-FetchContent_MakeAvailable(opencv)
 
 find_package(X11 REQUIRED)
 find_package(OpenCV REQUIRED)

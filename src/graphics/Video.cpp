@@ -21,7 +21,7 @@ Video::Video(const std::string &file) : __video(file) {
     __cacheLoader = std::thread(&Video::__loadFrame, this);
     while (!__isLoaded) {}
     std::cout << "Frame count: " << __video.get(cv::CAP_PROP_FRAME_COUNT) << std::endl;
-    std::cout << "Framerate: " << __video.get(cv::CAP_PROP_FPS) << std::endl;
+    // std::cout << "Framerate: " << __video.get(cv::CAP_PROP_FPS) << std::endl;
     __framerate = __video.get(cv::CAP_PROP_FPS);
 }
 
@@ -69,6 +69,8 @@ const unsigned int &Video::getFramerate() const {
 }
 
 void Video::__loadFrame() {
+    const float factor = 0.5;
+    //---
     while (__isRunning) {
         if (__pos >= __video.get(cv::CAP_PROP_FRAME_COUNT)) {
             __video.set(cv::CAP_PROP_POS_FRAMES, 0);
@@ -88,7 +90,7 @@ void Video::__loadFrame() {
         }
         __isLoaded = true;
 
-        const float dt = (1.0f / __framerate) * (__frameCache.size() * 0.25) * 1000;
+        const float dt = (__cacheSize * (1.0f / __framerate) - (__cacheSize * factor)) * 1000;
         // std::cout << "Delta:" << dt << std::endl;
         // std::this_thread::sleep_for(std::chrono::milliseconds((int64_t)dt));
     }

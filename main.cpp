@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <chrono>
+#include <cmath>
 
 #include <opencv4/opencv2/core.hpp>
 #include <opencv4/opencv2/imgproc.hpp>
@@ -117,21 +118,27 @@ int main(int argc, char *argv[]) {
     // Setting a chrono for delta time
     auto last = std::chrono::high_resolution_clock::now();
     win->lower();
-    auto fpsd = capture.getFramerate();
+    win->display();
+    //--------------------------------
+    auto framerate = capture.getFramerate();
+    double fps = 0;
+    std::cout << "Framerate: " << framerate << std::endl;
     // ---
     while (true) {
         auto current = std::chrono::high_resolution_clock::now();
         auto delta = std::chrono::duration_cast<std::chrono::milliseconds>(current - last).count();
         last = current;
-        // std::cout << 1000.f / fpsd << std::endl;
+        fps = 1000.0 / delta;
+        std::cout << "Delta: " << delta << std::endl;
+        std::cout << "FPS: " << fps << std::endl;
         // std::cout << delta << std::endl;
-        if (delta < 1000.f / fpsd)
-            std::this_thread::sleep_for(std::chrono::milliseconds(1000 / fpsd - delta));
+        std::cout << "Sleep: " << fps - framerate << std::endl;
+        if (framerate < fps && !std::isinf(fps))
+            std::this_thread::sleep_for(std::chrono::milliseconds((int64_t)fps - (int64_t)framerate));
         auto frame = capture.getFrame();
         if (frame.empty())
             break;
         win->drawFrame(frame);
-        win->display();
         frame.release();
     }
 }
